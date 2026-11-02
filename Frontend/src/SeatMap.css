@@ -1,0 +1,157 @@
+
+.library-map {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px;
+  background: white;
+  border: 1px solid #e5eaf1;
+  border-radius: 14px;
+}
+
+.library-map h3 {
+  margin: 0 0 20px;
+  font-size: 19px;
+  color: #25364e;
+}
+
+/* 좌석 배치 영역 */
+.seat-layout {
+  min-height: 390px;
+  padding: 24px;
+  background: #f8fafc;
+  border: 2px solid #dce5ef;
+  border-radius: 10px;
+}
+
+/* 왼쪽 벽을 따라 좌석 배치 */
+.seat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: fit-content;
+  padding-left: 16px;
+  border-left: 5px solid #94a3b8;
+}
+
+/* 좌석 */
+.map-seat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 110px;
+  height: 60px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+/* 이용 가능: 파란색 */
+.seat-list .map-seat.available {
+  background: #e8f2ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+/* 점유 중: 주황색 */
+.seat-list .map-seat.occupied {
+  background: #fff0dc;
+  border-color: #fdba74;
+  color: #ea580c;
+}
+
+.map-seat:hover {
+  filter: brightness(0.97);
+}
+
+.map-seat.selected {
+  outline: 3px solid #334155;
+  outline-offset: 2px;
+}
+
+.map-seat-number {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.map-seat-status {
+  font-size: 11px;
+}
+
+/* 범례 */
+.map-legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.map-legend > span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.map-legend .map-legend-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.map-legend .available-dot {
+  background: #3b82f6;
+}
+
+.map-legend .occupied-dot {
+  background: #f97316;
+}
+
+/* 선택한 좌석 정보 */
+.map-seat-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 18px;
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.map-seat-detail strong {
+  font-size: 15px;
+  color: #25364e;
+}
+
+.map-seat-detail p {
+  margin: 7px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.map-seat-detail button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 7px;
+  background: #334155;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .library-map {
+    padding: 14px;
+  }
+
+  .seat-layout {
+    padding: 15px;
+  }
+
+  .map-seat {
+    width: 95px;
+    height: 58px;
+  }
+}

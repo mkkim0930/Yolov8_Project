@@ -1,0 +1,15 @@
+# --- 비밀 값 / 개인 데이터 (절대 올리지 않기) ---
+*.pem
+.env
+start_server.bat
+library.db*
+*.bak-*
+
+# --- AI 모델 (용량 큼, 따로 공유) ---
+models/*.pt
+
+# --- 자동으로 생기는 파일 ---
+__pycache__/
+*.pyc
+node_modules/
+dist/

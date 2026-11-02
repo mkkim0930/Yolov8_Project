@@ -1,0 +1,185 @@
+/* 서버 연결을 위해 새로 추가된 화면 요소의 스타일 (기존 App.css 는 수정하지 않았습니다) */
+
+/* 실시간 연결 표시 (App.css 의 .status-badge / .status-dot 재사용) */
+.connection-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+.status-dot.off {
+  background: #f97316;
+}
+
+/* 좌석 목록 로딩/오류 안내 */
+.seat-message {
+  margin: 0;
+  padding: 10px 4px;
+  color: #8895a7;
+  font-size: 13px;
+}
+
+.seat-message.error {
+  color: #c2410c;
+}
+
+/* 좌석 상세 안의 알림 버튼 */
+.seat-detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.alert-btn {
+  padding: 11px 16px;
+  background: #3467df;
+  border: 1px solid #3467df;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.alert-btn:hover:not(:disabled) {
+  background: #2a56c4;
+}
+
+.alert-btn.ghost {
+  background: #ffffff;
+  color: #3467df;
+}
+
+.alert-btn.ghost:hover:not(:disabled) {
+  background: #eaf1ff;
+}
+
+.alert-btn:disabled {
+  background: #e8edf3;
+  border-color: #e8edf3;
+  color: #94a3b8;
+  cursor: default;
+}
+
+/* 알림 신청 결과 팝업 */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.modal {
+  width: 100%;
+  max-width: 360px;
+  padding: 30px 26px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.modal-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 16px;
+  background: #eaf1ff;
+  border-radius: 50%;
+  color: #3467df;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.modal-icon.error {
+  background: #fff0dc;
+  color: #ea580c;
+}
+
+.modal h4 {
+  margin: 0 0 10px;
+  color: #25364e;
+  font-size: 17px;
+}
+
+.modal p {
+  margin: 0 0 22px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.modal-confirm {
+  width: 100%;
+  padding: 12px;
+  background: #3467df;
+  border: none;
+  border-radius: 9px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 수거 물품 목록 */
+.item-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  background: #ffffff;
+  border: 1px solid #e8edf3;
+  border-radius: 14px;
+  text-align: left;
+}
+
+.item-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  background: #eaf1ff;
+  border-radius: 12px;
+  color: #3467df;
+}
+
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-info strong {
+  color: #25364e;
+  font-size: 14px;
+}
+
+.item-info p {
+  margin: 6px 0 0;
+  color: #8895a7;
+  font-size: 12px;
+}
+
+.item-badge {
+  padding: 6px 11px;
+  background: #e8f7ed;
+  border-radius: 6px;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}

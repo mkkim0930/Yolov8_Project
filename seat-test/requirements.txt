@@ -1,0 +1,8 @@
+# --- 서버 (main.py) ---
+fastapi
+uvicorn[standard]
+pywebpush
+
+# --- 탐지 (seat_detector.py, roi_setup.py) ---
+ultralytics
+opencv-python

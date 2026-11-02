@@ -1,0 +1,9 @@
+{
+  "name": "도서관 1인석 현황",
+  "short_name": "1인석",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1B2A4A",
+  "icons": []
+}
