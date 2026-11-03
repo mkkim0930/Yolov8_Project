@@ -28,12 +28,9 @@ export default function SeatsPage() {
   // 자리가 나면(어느 층이든) 서버가 알림을 보내고 신청을 지우므로, 화면의 '알림 설정됨' 표시도 푼다
   const clearAlerted = useCallback((m) => {
     setAlerted((prev) => {
-      const seatKey = `seat:${m.id}`;
-      const floorKey = `floor:${m.floor}`;
-      if (!prev.has(seatKey) && !prev.has(floorKey)) return prev;
+      if (!prev.has(m.id)) return prev;
       const next = new Set(prev);
-      next.delete(seatKey);
-      next.delete(floorKey);
+      next.delete(m.id);
       return next;
     });
   }, []);
@@ -52,16 +49,14 @@ export default function SeatsPage() {
   };
 
   // 반드시 버튼을 누른 순간에 호출되어야 합니다 (브라우저가 클릭 없는 알림 권한 요청을 막음)
-  const requestAlert = async (target, key) => {
+  const requestAlert = async (seatId) => {
     setBusy(true);
     try {
-      await subscribeToAlert(target);
-      setAlerted((prev) => new Set(prev).add(key));
+      await subscribeToAlert({ seatId });
+      setAlerted((prev) => new Set(prev).add(seatId));
       setModal({
         title: '알림 신청이 완료되었습니다',
-        message: target.seatId
-          ? '이 좌석이 비면 알림으로 알려드릴게요. 페이지를 닫아도 받을 수 있어요.'
-          : `${selectedFloor}층에 자리가 나면 알림으로 알려드릴게요. 페이지를 닫아도 받을 수 있어요.`,
+        message: '이 좌석이 비면 알림으로 알려드릴게요. 페이지를 닫아도 받을 수 있어요.',
       });
     } catch (e) {
       setModal({
@@ -135,18 +130,9 @@ export default function SeatsPage() {
           <SeatDetail
             seat={selectedSeat}
             floor={selectedFloor}
-            seatAlerted={alerted.has(`seat:${selectedSeat.id}`)}
-            floorAlerted={alerted.has(`floor:${selectedFloor}`)}
+            seatAlerted={alerted.has(selectedSeat.id)}
             busy={busy}
-            onAlertSeat={() =>
-              requestAlert(
-                { seatId: selectedSeat.id },
-                `seat:${selectedSeat.id}`
-              )
-            }
-            onAlertFloor={() =>
-              requestAlert({ floor: selectedFloor }, `floor:${selectedFloor}`)
-            }
+            onAlertSeat={() => requestAlert(selectedSeat.id)}
             onClose={() => setSelectedSeatId(null)}
           />
         )}

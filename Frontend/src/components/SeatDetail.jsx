@@ -11,10 +11,8 @@ export default function SeatDetail({
   seat,
   floor,
   seatAlerted,
-  floorAlerted,
   busy,
   onAlertSeat,
-  onAlertFloor,
   onClose,
 }) {
   return (
@@ -61,27 +59,17 @@ export default function SeatDetail({
           </p>
         )}
 
-        <div className="seat-detail-actions">
-          {seat.status !== 'available' && (
+        {seat.status !== 'available' && (
+          <div className="seat-detail-actions">
             <button
               className="alert-btn"
               disabled={seatAlerted || busy}
               onClick={onAlertSeat}
             >
-              {seatAlerted ? '알림 설정됨' : '이 좌석 알림 받기'}
+              {seatAlerted ? '알림 설정됨' : '알림 받기'}
             </button>
-          )}
-
-          <button
-            className="alert-btn ghost"
-            disabled={floorAlerted || busy}
-            onClick={onAlertFloor}
-          >
-            {floorAlerted
-              ? '알림 설정됨'
-              : `${floor}층에 자리 나면 알림 받기`}
-          </button>
-        </div>
+          </div>
+        )}
       </div>
 
       <button className="detail-close" onClick={onClose}>
