@@ -15,6 +15,7 @@ self.addEventListener("push", (event) => {
     self.registration.showNotification(data.title || "빈자리 알림", {
       body: data.body || "",
       tag: data.seat_id || "seat",        // 같은 좌석 알림이 겹치면 하나로 합침
+      renotify: true,
       data: { floor: data.floor, seat_id: data.seat_id },
     })
   );

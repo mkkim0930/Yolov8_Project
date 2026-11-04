@@ -1,9 +1,9 @@
 # --- 비밀 값 / 개인 데이터 (절대 올리지 않기) ---
 *.pem
 .env
-start_server.bat
 library.db*
 *.bak-*
+*.bat
 
 # --- AI 모델 (용량 큼, 따로 공유) ---
 models/*.pt
