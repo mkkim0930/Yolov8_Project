@@ -1,12 +1,22 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import './extra.css';
 import Sidebar from './components/Sidebar';
 import SeatsPage from './pages/SeatsPage';
 import ItemsPage from './pages/ItemsPage';
+import AdminPage from './pages/AdminPage';  
 
 function App() {
   const [activePage, setActivePage] = useState('seats');
+    // 관리자 화면: 주소 끝에 #admin 을 붙여 접속 (학생용 메뉴에는 나타나지 않음)
+  const [isAdmin, setIsAdmin] = useState(() => window.location.hash === '#admin');
+  useEffect(() => {
+    const onHash = () => setIsAdmin(window.location.hash === '#admin');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  if (isAdmin) return <AdminPage />;
 
   return (
     <div className="app-container">

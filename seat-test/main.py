@@ -86,8 +86,11 @@ def _same(a: Optional[str], b: str) -> bool:
 
 
 def require_admin(token: Optional[str]):
-    if not ADMIN_TOKEN or not _same(token, ADMIN_TOKEN):
-        raise HTTPException(status_code=401, detail="관리자 인증이 필요합니다")
+    if not ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="서버에 ADMIN_TOKEN 이 설정되지 않았습니다. "
+                                                    "local_env.bat 을 확인하고 서버를 완전히 껐다가 다시 켜세요")
+    if not _same(token, ADMIN_TOKEN):
+        raise HTTPException(status_code=401, detail="관리자 토큰이 올바르지 않습니다")
 
 
 def require_detector(key: Optional[str]):
@@ -197,6 +200,10 @@ async def sakhwa_loop():
 @asynccontextmanager
 async def lifespan(app):
     db.init_db()
+    if ADMIN_TOKEN:
+        print(f"[관리자] ADMIN_TOKEN 설정됨 (길이 {len(ADMIN_TOKEN)}자). 입력한 토큰의 글자 수와 다르면 공백이 섞인 것입니다")
+    else:
+        print("[관리자] ADMIN_TOKEN 이 없습니다 - 관리자 기능이 꺼져 있습니다")
     if not DETECTOR_KEY:
         print("[보안] DETECTOR_KEY 가 없어 좌석 상태를 인증 없이 받습니다. 내 컴퓨터에서만 쓰세요. "
               "서버를 외부에 공개한다면 DETECTOR_KEY 를 설정하세요.")
