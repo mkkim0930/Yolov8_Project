@@ -23,3 +23,20 @@
 - `lost_items(id, seat_id, floor, image_path, note, storage_place, status, registered_at, handled_at, claimed_at)`
 
 예전 구조의 library.db 가 있으면 서버/`setup_db.py` 가 `library.db.bak-날짜` 로 백업하고 새로 만듭니다.
+
+
+## (추가) AI 가 감지한 물품 자동 등록
+
+`POST /seat-status` 에 선택 항목 2개가 생겼습니다 (없어도 예전처럼 동작).
+
+| 항목 | 설명 |
+|---|---|
+| `items` | 점유 중일 때 AI 가 본 물품 클래스 이름 목록. 예: `["book","book","laptop"]` |
+| `image` | 좌석 영역을 잘라 만든 JPEG 사진을 base64 로 인코딩한 문자열 (700KB 이하) |
+
+- 서버는 점유 중인 좌석의 최신 물품/사진을 기억해 두었다가, 사석화(점유 중 기준 시간 초과)가 확정되면
+  분실물(PENDING)을 만들면서 `note`("책 2개, 노트북 (AI 자동 감지)")와 사진을 자동으로 채웁니다.
+- 점유가 풀리면(사용 중/빈 자리) 기억한 사진은 지워집니다. 주인이 찾아가면(claimed) 사진도 지워집니다.
+- 분실물 목록 응답(`/lost-items`, `/admin/lost-items`)에 `image_url` 이 추가됩니다. 사진이 없으면 `null`.
+- `GET /lost-items/image/{파일이름}.jpg` : 사진. 파일 이름이 추측하기 어려운 값입니다.
+- 관리자가 `confirm` 할 때 `note` 를 비워 보내면 AI 가 적은 설명이 그대로 유지됩니다.

@@ -125,7 +125,7 @@ function LoginForm({ onLogin }) {
 
 // ---- 확인 대기 카드 (설명과 보관 장소를 적고 학생에게 공개) ----
 function PendingCard({ item, onConfirm, busy, now }) {
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState(item.note || ''); // AI 가 감지한 물품이 미리 채워져 있음 (고칠 수 있음)
   const [place, setPlace] = useState('');
 
   return (
@@ -138,6 +138,14 @@ function PendingCard({ item, onConfirm, busy, now }) {
         사석화 감지 {formatDateTime(item.registered_at)} ·{' '}
         {formatMinutes(minutesSince(item.registered_at, now))} 전
       </p>
+      {item.image_url && (
+        <img
+          className="adm-photo"
+          src={`${globalThis.window?.API_BASE ?? ''}${item.image_url}`}
+          alt="AI 가 찍어 둔 좌석 사진"
+        />
+      )}
+      {item.note && <p className="adm-meta">AI 가 감지한 물품이 아래에 미리 적혀 있어요. 사진과 다르면 고쳐 주세요.</p>}
       <input
         value={note}
         onChange={(e) => setNote(e.target.value)}
@@ -272,6 +280,13 @@ function AdminBoard({ token, onLogout }) {
                   <strong>{item.floor}층 {item.seat_id}</strong>
                   <span className="adm-badge ok">보관 중</span>
                 </div>
+                {item.image_url && (
+                  <img
+                    className="adm-photo"
+                    src={`${globalThis.window?.API_BASE ?? ''}${item.image_url}`}
+                    alt="보관 중인 물품 사진"
+                  />
+                )}
                 <p className="adm-meta">
                   {item.note || '설명 없음'}
                   {item.storage_place && ` · ${item.storage_place}`}
@@ -305,7 +320,7 @@ export default function AdminPage() {
       <header className="adm-header">
         <div>
           <p className="adm-sub">ADMIN</p>
-          <h1>분실물 관리</h1>
+          <h1>수거 물품 관리</h1>
         </div>
         <div className="adm-header-actions">
           <a className="adm-link" href="#" onClick={() => { window.location.hash = ''; }}>

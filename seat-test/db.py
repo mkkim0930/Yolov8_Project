@@ -260,21 +260,30 @@ def find_sakhwa(path=None, now=None, threshold=SAKHWA_THRESHOLD):
 # ------------------------------------------------------------------
 # 분실물 (수거 물품 안내)
 # ------------------------------------------------------------------
-def register_lost_item(seat_id, image_path=None, path=None, now=None):
-    """사석화로 판단된 좌석의 물품을 분실물(PENDING)로 등록. 새 분실물 id 반환."""
+def register_lost_item(seat_id, image_path=None, path=None, now=None, note=None):
+    """사석화로 판단된 좌석의 물품을 분실물(PENDING)로 등록. 새 분실물 id 반환.
+    note: AI 가 감지한 물품 설명(관리자가 확인하면서 고칠 수 있음), image_path: 사진 파일 이름"""
     seat = get_seat(seat_id, path)
     if seat is None:
         raise KeyError(f"unknown seat: {seat_id}")
     with get_conn(path) as c:
-        cur = c.execute("INSERT INTO lost_items(seat_id, floor, image_path, status, registered_at) "
-                        "VALUES (?, ?, ?, 'PENDING', ?)", (seat_id, seat["floor"], image_path, now or _now()))
+        cur = c.execute("INSERT INTO lost_items(seat_id, floor, image_path, note, status, registered_at) "
+                        "VALUES (?, ?, ?, ?, 'PENDING', ?)",
+                        (seat_id, seat["floor"], image_path, note, now or _now()))
         return cur.lastrowid
+
+
+def get_lost_item(item_id, path=None):
+    """분실물 한 건 조회 (없으면 None)."""
+    with get_conn(path) as c:
+        row = c.execute("SELECT * FROM lost_items WHERE id=?", (item_id,)).fetchone()
+    return dict(row) if row else None
 
 
 def admin_confirm_item(item_id, note=None, storage_place=None, path=None, now=None):
     """관리자가 확인(PENDING -> STORED). 학생 화면에 공개된다. 바뀌었으면 True."""
     with get_conn(path) as c:
-        cur = c.execute("UPDATE lost_items SET status='STORED', handled_at=?, note=?, storage_place=? "
+        cur = c.execute("UPDATE lost_items SET status='STORED', handled_at=?, note=COALESCE(NULLIF(?, ''), note), storage_place=? "
                         "WHERE id=? AND status='PENDING'", (now or _now(), note, storage_place, item_id))
         return cur.rowcount > 0
 

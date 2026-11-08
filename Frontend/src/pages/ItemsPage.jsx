@@ -82,7 +82,16 @@ export default function ItemsPage() {
           {items.map((item) => (
             <div key={item.id} className="item-card">
               <div className="item-thumb">
-                <BoxIcon size={32} />
+                {item.image_url ? (
+                  <img
+                    className="item-photo"
+                    src={`${globalThis.window?.API_BASE ?? ''}${item.image_url}`}
+                    alt="수거된 물품 사진"
+                    loading="lazy"
+                  />
+                ) : (
+                  <BoxIcon size={32} />
+                )}
               </div>
               <div className="item-info">
                 <strong>{item.seat_id}번 좌석에서 수거</strong>
