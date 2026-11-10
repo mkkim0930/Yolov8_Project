@@ -51,12 +51,17 @@ export default function SeatDetail({
           </div>
         </div>
 
-        {seat.status === 'occupied' && (
+        {seat.status === 'occupied' && seat.minutes >= 60 && (
           <p className="seat-notice">
+            자리를 비운 지 1시간이 넘었습니다. 관리자가 좌석을 정리합니다.
+          </p>
+        )}
+
+        {seat.status === 'occupied' && !(seat.minutes >= 60) && (
+          <p className="seat-notice"> 
             물품이 남아 있는 상태입니다.
             점유 시간이 60분 이상 지속되면
-            관리자 확인 대상이 될 수 있습니다.
-          </p>
+            관리자 확인 대상이 될 수 있습니다. </p>
         )}
 
         {seat.status !== 'available' && (

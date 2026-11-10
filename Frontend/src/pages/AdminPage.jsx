@@ -303,7 +303,7 @@ function AdminBoard({ token, onLogout }) {
             ))}
           </div>
         )}
-        {claimedCount > 0 && <p className="adm-empty">수령 완료 {claimedCount}건</p>}
+        {/* {claimedCount > 0 && <p className="adm-empty">수령 완료 {claimedCount}건</p>} */}
       </section>
     </>
   );
