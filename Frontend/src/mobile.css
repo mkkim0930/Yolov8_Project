@@ -1,0 +1,170 @@
+/* 나리도서관 화면 스타일 (파란색 계열, 모바일 우선). 클래스 이름이 모두 nl- 로 시작해서 admin.css 와 겹치지 않습니다 */
+:root {
+  --nl-bg: #f1f5fd; --nl-card: #ffffff; --nl-ink: #14213d; --nl-muted: #6b7a99; --nl-line: #dfe7f5;
+  --nl-brand: #2f62e0; --nl-brand-soft: #dce7ff; --nl-brand-faint: #eef3ff;
+  /* 상태 색 = 아이콘 색: 이용 가능 파랑 / 사용 중 초록 / 점유 중 주황 */
+  --nl-a: #3b82f6; --nl-a-text: #2563eb; --nl-a-bg: #eaf2ff; --nl-a-line: #bcd4fb;
+  --nl-u: #22a55b; --nl-u-text: #1b8a4b; --nl-u-bg: #e7f7ee; --nl-u-line: #b5e3c8;
+  --nl-o: #f97316; --nl-o-text: #d4600c; --nl-o-bg: #fff1e4; --nl-o-line: #fbcfa6;
+  --nl-nav-h: 68px; --nl-side-w: 236px;
+}
+html, body { margin: 0; padding: 0; min-width: 0; display: block; background: var(--nl-bg); }
+#root { max-width: none; width: 100%; margin: 0; padding: 0; text-align: left; }
+.nl-app, .nl-app * { box-sizing: border-box; }
+.nl-app {
+  min-height: 100vh; min-height: 100dvh; color: var(--nl-ink); background: var(--nl-bg);
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  font-size: 16px; line-height: 1.5; -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent;
+}
+:where(.nl-app) :where(h1, h2, h3, h4, p) { margin: 0; }
+:where(.nl-app) button { font-family: inherit; color: inherit; cursor: pointer; }
+
+/* ---------- 위쪽 바 + 메뉴 ---------- */
+.nl-header {
+  position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px; background: #fff; border-bottom: 1px solid var(--nl-line);
+}
+.nl-brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.nl-logo { display: grid; place-items: center; width: 34px; height: 34px; flex: none; background: var(--nl-brand); border-radius: 11px; }
+.nl-brand strong { display: block; font-size: 17px; line-height: 1.2; }
+.nl-brand span { display: block; color: var(--nl-muted); font-size: 11.5px; }
+.nl-nav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; display: grid; grid-template-columns: 1fr 1fr;
+  height: calc(var(--nl-nav-h) + env(safe-area-inset-bottom)); padding-bottom: env(safe-area-inset-bottom);
+  background: #fff; border-top: 1px solid var(--nl-line);
+}
+.nl-nav button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: none; border: 0; color: var(--nl-muted); font-size: 11.5px; font-weight: 700; }
+.nl-nav .ic { display: grid; place-items: center; width: 48px; height: 28px; border-radius: 99px; }
+.nl-nav button.active { color: var(--nl-brand); }
+.nl-nav button.active .ic { background: var(--nl-brand-soft); }
+.nl-nav svg { width: 20px; height: 20px; }
+
+.nl-main { max-width: 640px; margin: 0 auto; padding: 16px 16px calc(var(--nl-nav-h) + 28px + env(safe-area-inset-bottom)); }
+.nl-title { margin-bottom: 14px; }
+.nl-title h1 { font-size: 24px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02em; }
+.nl-title p { margin-top: 3px; color: var(--nl-muted); font-size: 14px; }
+.nl-live { display: inline-flex; align-items: center; gap: 6px; color: var(--nl-brand); font-size: 12.5px; font-weight: 700; }
+.nl-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--nl-brand); box-shadow: 0 0 0 3px #2f62e033; }
+.nl-live.off { color: #b45309; } .nl-live.off i { background: #f59e0b; box-shadow: 0 0 0 3px #f59e0b33; }
+
+/* ---------- 요약 (이용 가능 / 전체 좌석) ---------- */
+.nl-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.nl-stat { padding: 14px 16px; background: #fff; border: 1.5px solid var(--nl-line); border-radius: 20px; }
+.nl-stat p { color: var(--nl-muted); font-size: 12.5px; font-weight: 700; }
+.nl-stat h2 { margin-top: 2px; font-size: 30px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+.nl-stat h2 small { margin-left: 3px; font-size: 15px; }
+.nl-stat.primary { background: var(--nl-brand); border-color: var(--nl-brand); color: #fff; }
+.nl-stat.primary p { color: #cfddff; }
+
+/* ---------- 층 선택 ---------- */
+.nl-floors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.nl-floors button { min-height: 44px; border: 1.5px solid var(--nl-line); border-radius: 99px; background: #fff; color: var(--nl-muted); font-size: 15px; font-weight: 700; }
+.nl-floors button.active { background: var(--nl-ink); border-color: var(--nl-ink); color: #fff; }
+
+/* ---------- 범례 + 좌석 ---------- */
+.nl-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 0 4px 10px; font-size: 12.5px; font-weight: 700; }
+.nl-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.nl-legend i { width: 13px; height: 13px; border-radius: 4px; }
+.nl-legend .u i { background: var(--nl-u); } .nl-legend .o i { background: var(--nl-o); } .nl-legend .a i { background: var(--nl-a); }
+
+.nl-seats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; background: #e9eef8; border-radius: 20px; }
+.nl-seat {
+  display: flex; align-items: center; gap: 12px; min-height: 84px; padding: 14px; text-align: left;
+  background: #fff; border: 2px solid transparent; border-radius: 16px; transition: transform 0.08s;
+}
+.nl-seat:active { transform: scale(0.97); }
+.nl-seat svg { width: 36px; height: 36px; flex: none; }
+.nl-seat b { display: block; font-size: 19px; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; color: var(--nl-ink); }
+.nl-seat span { display: block; font-size: 12.5px; font-weight: 700; }
+.nl-seat.available { background: var(--nl-a-bg); border-color: var(--nl-a-line); } .nl-seat.available span { color: var(--nl-a-text); }
+.nl-seat.inUse { background: var(--nl-u-bg); border-color: var(--nl-u-line); } .nl-seat.inUse span { color: var(--nl-u-text); }
+.nl-seat.occupied { background: var(--nl-o-bg); border-color: var(--nl-o-line); } .nl-seat.occupied span { color: var(--nl-o-text); }
+.nl-seat.selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--nl-ink); }
+.nl-message { grid-column: 1 / -1; padding: 28px 12px; text-align: center; color: var(--nl-muted); font-size: 14px; }
+.nl-message.error { color: #c2410c; }
+
+/* ---------- 좌석 상세: 모바일은 아래에서 올라오는 시트, 넓은 화면은 오른쪽 패널 ---------- */
+.nl-backdrop { position: fixed; inset: 0; z-index: 40; background: rgba(15, 26, 58, 0.45); animation: nl-fade 0.15s; }
+.nl-sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 41; max-width: 640px; margin: 0 auto;
+  padding: 12px 22px calc(22px + env(safe-area-inset-bottom)); background: #fff; border-radius: 28px 28px 0 0;
+  box-shadow: 0 -8px 30px rgba(15, 26, 58, 0.22); animation: nl-up 0.2s ease-out;
+}
+.nl-grab { width: 42px; height: 4px; margin: 0 auto 16px; background: #cfd8ec; border-radius: 4px; }
+.nl-sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.nl-sheet-head h3 { font-size: 24px; font-weight: 800; }
+.nl-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 99px; font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+.nl-chip::before { content: ""; width: 8px; height: 8px; border-radius: 3px; background: currentColor; }
+.nl-chip.available { background: var(--nl-a-bg); color: var(--nl-a-text); }
+.nl-chip.inUse { background: var(--nl-u-bg); color: var(--nl-u-text); }
+.nl-chip.occupied { background: var(--nl-o-bg); color: var(--nl-o-text); }
+.nl-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+.nl-fact { padding: 12px 14px; background: var(--nl-brand-faint); border-radius: 14px; }
+.nl-fact span { display: block; color: var(--nl-muted); font-size: 12px; font-weight: 600; }
+.nl-fact strong { display: block; margin-top: 2px; font-size: 16px; }
+.nl-fact.wide { grid-column: 1 / -1; } .nl-fact.wide strong { font-size: 14px; font-weight: 600; }
+.nl-notice { margin-bottom: 14px; padding: 13px 14px; background: var(--nl-o-bg); border-radius: 14px; color: #b45309; font-size: 14px; font-weight: 700; line-height: 1.55; }
+.nl-primary { width: 100%; min-height: 52px; border: 0; border-radius: 99px; background: var(--nl-brand); color: #fff !important; font-size: 16px; font-weight: 700; }
+.nl-primary:disabled { background: #b9c6e6; cursor: default; }
+.nl-primary.done { background: var(--nl-a-bg); color: var(--nl-a-text) !important; }
+.nl-ghost { width: 100%; min-height: 46px; margin-top: 6px; background: none; border: 0; color: var(--nl-muted); font-size: 15px; font-weight: 600; }
+.nl-hint { margin-bottom: 4px; color: var(--nl-muted); font-size: 14px; text-align: center; }
+.nl-aside-empty { display: none; }
+
+/* ---------- 결과 팝업 ---------- */
+.nl-modal-wrap { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; background: rgba(15, 26, 58, 0.5); animation: nl-fade 0.15s; }
+.nl-modal { width: 100%; max-width: 420px; padding: 24px 22px calc(22px + env(safe-area-inset-bottom)); text-align: center; background: #fff; border-radius: 26px 26px 0 0; animation: nl-up 0.2s ease-out; }
+.nl-modal-icon { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 12px; background: var(--nl-a-bg); color: var(--nl-a-text); border-radius: 50%; font-size: 26px; font-weight: 800; }
+.nl-modal-icon.error { background: var(--nl-o-bg); color: var(--nl-o-text); }
+.nl-modal h4 { font-size: 18px; }
+.nl-modal p { margin: 8px 0 18px; color: var(--nl-muted); font-size: 14px; word-break: keep-all; }
+
+/* ---------- 수거 물품 (글자만) ---------- */
+.nl-items { display: grid; gap: 12px; }
+.nl-item { padding: 16px 18px; background: #fff; border: 1.5px solid var(--nl-line); border-radius: 20px; }
+.nl-item-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.nl-item-top strong { font-size: 17px; }
+.nl-badge { padding: 3px 10px; background: var(--nl-brand-soft); color: var(--nl-brand); border-radius: 99px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.nl-item-note { margin-top: 8px; font-size: 15px; font-weight: 700; word-break: keep-all; }
+.nl-item-meta { margin-top: 4px; color: var(--nl-muted); font-size: 13px; }
+.nl-item-meta b { color: var(--nl-ink); }
+.nl-empty { padding: 44px 20px; text-align: center; background: #fff; border: 1.5px dashed var(--nl-line); border-radius: 20px; }
+.nl-empty h3 { font-size: 17px; }
+.nl-empty p { margin-top: 6px; color: var(--nl-muted); font-size: 14px; word-break: keep-all; }
+.nl-footer { margin-top: 26px; text-align: center; color: #98a4c0; font-size: 12px; }
+
+@keyframes nl-up { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes nl-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .nl-sheet, .nl-modal, .nl-backdrop, .nl-modal-wrap { animation: none; } .nl-seat { transition: none; } }
+
+@media (min-width: 560px) { .nl-seats { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---------- 컴퓨터 화면: 왼쪽 메뉴 + 가운데 좌석 + 오른쪽 상세 패널 ---------- */
+@media (min-width: 1000px) {
+  .nl-header {
+    position: fixed; left: 0; top: 0; bottom: 0; width: var(--nl-side-w); flex-direction: column; align-items: stretch; justify-content: flex-start;
+    gap: 30px; padding: 26px 18px; border-bottom: 0; border-right: 1px solid var(--nl-line);
+  }
+  .nl-nav { position: static; display: block; height: auto; padding: 0; background: none; border: 0; }
+  .nl-nav button { flex-direction: row; justify-content: flex-start; gap: 10px; width: 100%; margin-bottom: 6px; padding: 13px 16px; border-radius: 14px; font-size: 15px; }
+  .nl-nav .ic, .nl-nav button.active .ic { width: auto; height: auto; background: none; }
+  .nl-nav button.active { background: var(--nl-brand-soft); }
+  /* 화면이 아주 넓어도 내용은 최대 1120px 로 두고, 메뉴 오른쪽 영역의 가운데에 놓는다 */
+  .nl-main {
+    max-width: none; margin: 0 0 0 var(--nl-side-w); padding-top: 30px; padding-bottom: 40px;
+    padding-left: max(36px, calc((100vw - var(--nl-side-w) - 1120px) / 2));
+    padding-right: max(36px, calc((100vw - var(--nl-side-w) - 1120px) / 2));
+  }
+  .nl-seats-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 24px; align-items: start; }
+  .nl-title h1 { font-size: 28px; }
+  .nl-seats { grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 18px; }
+  .nl-seat { min-height: 104px; padding: 18px; } .nl-seat svg { width: 42px; height: 42px; } .nl-seat b { font-size: 22px; }
+  .nl-stat { padding: 20px 24px; border-radius: 24px; } .nl-stat h2 { font-size: 42px; } .nl-stat h2 small { font-size: 20px; }
+  .nl-floors { max-width: 420px; }
+  .nl-backdrop { display: none; }
+  .nl-sheet { position: sticky; top: 24px; z-index: 1; max-width: none; margin: 0; padding: 26px; border: 1.5px solid var(--nl-line); border-radius: 28px; box-shadow: none; animation: none; }
+  .nl-grab, .nl-ghost { display: none; }
+  .nl-aside-empty { display: block; padding: 40px 24px; text-align: center; color: var(--nl-muted); font-size: 14px; background: #fff; border: 1.5px dashed var(--nl-line); border-radius: 28px; }
+  .nl-modal-wrap { align-items: center; } .nl-modal { border-radius: 26px; }
+  .nl-footer { text-align: left; }
+}

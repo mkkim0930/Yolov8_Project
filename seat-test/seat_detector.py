@@ -433,9 +433,9 @@ def main():
     ap.add_argument("--server", default="http://localhost:8000")
     ap.add_argument("--key", default=os.environ.get("DETECTOR_KEY"),
                     help="서버 인증 키 (서버에 DETECTOR_KEY 를 설정했을 때만 필요. 환경변수 DETECTOR_KEY 로도 가능)")
-    ap.add_argument("--person-classes", default="sit down",
-                    help="'사용중'으로 볼 클래스 이름(쉼표 구분). 기본: sit down")
-    ap.add_argument("--item-classes", default="reserving",
+    ap.add_argument("--person-classes", default="Sit Down",
+                    help="'사용중'으로 볼 클래스 이름(쉼표 구분). 기본: Sit Down")
+    ap.add_argument("--item-classes", default="backpack,handbag,book,laptop,cell phone,bottle,cup",
                     help="'점유중(사석화)'으로 볼 클래스 이름(쉼표 구분). 기본: reserving")
     ap.add_argument("--conf", type=float, default=0.4, help="탐지 신뢰도 기준")
     ap.add_argument("--person-conf", type=float, default=None, help="사람 모델 신뢰도 기준 (없으면 --conf)")
