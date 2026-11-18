@@ -11,22 +11,12 @@ export default function AlertModal({ title, message, error, onClose }) {
   }, [onClose]);
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div
-        className="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label={title}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className={`modal-icon ${error ? 'error' : ''}`}>
-          {error ? '!' : '✓'}
-        </div>
+    <div className="nl-modal-wrap" onClick={onClose}>
+      <div className="nl-modal" role="dialog" aria-modal="true" aria-label={title} onClick={(e) => e.stopPropagation()}>
+        <div className={`nl-modal-icon ${error ? 'error' : ''}`}>{error ? '!' : '✓'}</div>
         <h4>{title}</h4>
         <p>{message}</p>
-        <button className="modal-confirm" onClick={onClose}>
-          확인
-        </button>
+        <button className="nl-primary" onClick={onClose}>확인</button>
       </div>
     </div>
   );
