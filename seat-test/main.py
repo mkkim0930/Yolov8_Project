@@ -500,7 +500,8 @@ async def receive_seat_status(body: SeatStatus, x_detector_key: Optional[str] = 
         seat = db.get_seat(body.seat_id)
         await students.broadcast({
             "type": "seat", "id": body.seat_id, "floor": seat["floor"],
-            "status": body.status, "since": seat["status_since"], "minutes": 0,
+            "status": body.status, "since": seat["status_since"],
+            "minutes": db.minutes_since(seat["status_since"]) if body.status == "occupied" else 0,
         })
         if ev["became_empty"]:
             subs = db.pop_subscribers(body.seat_id)
