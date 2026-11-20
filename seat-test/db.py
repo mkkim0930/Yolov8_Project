@@ -32,6 +32,7 @@ SCHEMA_VERSION = 2
 AVAILABLE, IN_USE, OCCUPIED = "available", "inUse", "occupied"   # 빈 자리 / 사용 중 / 점유 중
 VALID_STATUS = (AVAILABLE, IN_USE, OCCUPIED)
 SAKHWA_THRESHOLD = timedelta(hours=1)
+RESET_USE_SECONDS = int(os.environ.get("RESET_USE_SECONDS", "1200"))
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS seats (
@@ -157,6 +158,12 @@ def init_db(path=None):
               f"좌석은 'python setup_db.py --demo' 등으로 다시 등록하세요.")
     with get_conn(path) as c:
         c.executescript(SCHEMA)
+        columns = {r["name"] for r in c.execute("PRAGMA table_info(seats)")}
+        if "saved_occupied_seconds" not in columns:
+            c.execute("ALTER TABLE seats ADD COLUMN saved_occupied_seconds INTEGER NOT NULL DEFAULT 0")
+        if "occupancy_session_since" not in columns:
+            c.execute("ALTER TABLE seats ADD COLUMN occupancy_session_since TEXT")
+            c.execute("UPDATE seats SET occupancy_session_since=status_since WHERE status=?", (OCCUPIED,))
         c.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
 
 
@@ -179,24 +186,41 @@ def upsert_seats(floor, seats, path=None, now=None):
 
 
 def update_seat_status(seat_id, new_status, path=None, now=None):
-    """탐지 결과를 반영한다.
-    - 상태가 '바뀌었으면' status_since 를 지금으로 리셋 (타이머 재시작)
-    - 상태가 '같으면' status_since 는 그대로 둔다 (시간이 계속 누적됨)
-    반환: {"changed", "old", "new", "became_empty"}
-    """
+    """20분 미만 사용 후 재점유하면 이전 점유 시간부터 재개한다."""
     if new_status not in VALID_STATUS:
         raise ValueError(f"unknown status: {new_status}")
     now = now or _now()
+    now_dt = parse_time(now)
     with get_conn(path) as c:
-        row = c.execute("SELECT status FROM seats WHERE seat_id=?", (seat_id,)).fetchone()
+        c.execute("BEGIN IMMEDIATE")
+        row = c.execute("SELECT * FROM seats WHERE seat_id=?", (seat_id,)).fetchone()
         if row is None:
             raise KeyError(f"unknown seat: {seat_id}")
         old = row["status"]
+        since = row["status_since"]
+        saved = row["saved_occupied_seconds"]
+        session = row["occupancy_session_since"]
+        elapsed = max(0, int((now_dt - parse_time(since)).total_seconds()))
+        if old == IN_USE and elapsed >= RESET_USE_SECONDS:
+            saved, session = 0, None
         if old == new_status:
-            c.execute("UPDATE seats SET updated_at=? WHERE seat_id=?", (now, seat_id))
+            c.execute("UPDATE seats SET updated_at=?, saved_occupied_seconds=?, occupancy_session_since=? WHERE seat_id=?",
+                      (now, saved, session, seat_id))
             return {"changed": False, "old": old, "new": new_status, "became_empty": False}
-        c.execute("UPDATE seats SET status=?, status_since=?, updated_at=? WHERE seat_id=?",
-                  (new_status, now, now, seat_id))
+        new_since = now
+        if new_status == AVAILABLE:
+            saved, session = 0, None
+        elif new_status == IN_USE:
+            saved = elapsed if old == OCCUPIED else 0
+        elif new_status == OCCUPIED:
+            if old == IN_USE and elapsed < RESET_USE_SECONDS:
+                new_since = (now_dt - timedelta(seconds=saved)).isoformat(timespec="seconds")
+            else:
+                saved, session = 0, None
+            session = session or now
+            saved = 0
+        c.execute("UPDATE seats SET status=?, status_since=?, updated_at=?, saved_occupied_seconds=?, occupancy_session_since=? WHERE seat_id=?",
+                  (new_status, new_since, now, saved, session, seat_id))
         c.execute("INSERT INTO seat_events(seat_id, old_status, new_status, at) VALUES (?,?,?,?)",
                   (seat_id, old, new_status, now))
         return {"changed": True, "old": old, "new": new_status,
@@ -217,7 +241,7 @@ def get_floor_seats(floor, path=None, now=None):
         rows = c.execute(f"SELECT seat_id, status, status_since FROM seats WHERE floor=? {SEAT_ORDER}",
                          (int(floor),)).fetchall()
     return [{"id": r["seat_id"], "status": r["status"], "since": r["status_since"],
-             "minutes": minutes_since(r["status_since"], now)} for r in rows]
+             "minutes": minutes_since(r["status_since"], now) if r["status"] == OCCUPIED else 0} for r in rows]
 
 
 def floor_counts(seats):
@@ -243,7 +267,7 @@ def find_sakhwa(path=None, now=None, threshold=SAKHWA_THRESHOLD):
     now_dt = parse_time(now) if now else datetime.now().astimezone()
     found = []
     with get_conn(path) as c:
-        rows = c.execute("SELECT seat_id, floor, status_since FROM seats WHERE status=?",
+        rows = c.execute("SELECT seat_id, floor, status_since, occupancy_session_since FROM seats WHERE status=?",
                          (OCCUPIED,)).fetchall()
         for r in rows:
             since = parse_time(r["status_since"])
@@ -251,7 +275,7 @@ def find_sakhwa(path=None, now=None, threshold=SAKHWA_THRESHOLD):
                 continue
             last = c.execute("SELECT registered_at FROM lost_items WHERE seat_id=? ORDER BY id DESC LIMIT 1",
                              (r["seat_id"],)).fetchone()
-            if last and parse_time(last["registered_at"]) >= since:
+            if last and parse_time(last["registered_at"]) >= parse_time(r["occupancy_session_since"] or r["status_since"]):
                 continue          # 이번 점유 건은 이미 분실물로 등록함
             found.append({"seat_id": r["seat_id"], "floor": r["floor"], "status_since": r["status_since"]})
     return found
