@@ -28,7 +28,7 @@ export default function ItemsPage() {
     <div>
       <div className="nl-title">
         <h1>수거 물품 안내</h1>
-        <p>관리자가 확인해 보관 중인 물품이에요. 주인이라면 보관 장소로 와 주세요.</p>
+        <p>관리자가 확인 후 보관 중인 물품 목록이에요<br />주인이라면 보관 장소로 와 주세요</p>
       </div>
 
       {loading && <p className="nl-message">수거 물품을 불러오는 중입니다…</p>}
@@ -43,7 +43,7 @@ export default function ItemsPage() {
       {!loading && !error && items.length === 0 && (
         <div className="nl-empty">
           <h3>보관 중인 수거 물품이 없습니다</h3>
-          <p>자리를 오래 비운 좌석의 물품은 관리자가 확인한 뒤 이곳에 표시됩니다.</p>
+          <p>자리를 오래 비운 좌석의 물품은<br />관리자가 확인한 뒤 이곳에 표시됩니다</p>
         </div>
       )}
 

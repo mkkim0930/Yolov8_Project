@@ -3,8 +3,8 @@ import { STATUS_LABELS } from '../constants';
 import { formatMinutes } from '../utils/time';
 
 const GUIDE = {
-  available: '바로 이용하실 수 있어요.',
-  inUse: '이용자가 사용 중입니다.',
+  available: '바로 이용할 수 있어요.',
+  inUse: '사용 중',
   occupied: '이용자는 없고 물품만 남아 있어요.',
 };
 

@@ -33,7 +33,6 @@ function App() {
           </div>
           <div>
             <strong>나리도서관</strong>
-            <span>1인석 이용 안내</span>
           </div>
         </div>
         <NavBar activePage={activePage} onChange={setActivePage} />
@@ -48,7 +47,6 @@ function App() {
         {/* 수거 물품 화면은 열 때마다 서버에서 새로 불러온다 */}
         {activePage === 'items' && <ItemsPage />}
 
-        <p className="nl-footer">한양여자대학교 나리도서관</p>
       </main>
     </div>
   );

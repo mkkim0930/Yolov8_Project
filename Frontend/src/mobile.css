@@ -41,7 +41,7 @@ html, body { margin: 0; padding: 0; min-width: 0; display: block; background: va
 
 .nl-main { max-width: 640px; margin: 0 auto; padding: 16px 16px calc(var(--nl-nav-h) + 28px + env(safe-area-inset-bottom)); }
 .nl-title { margin-bottom: 14px; }
-.nl-title h1 { font-size: 24px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02em; }
+.nl-title h1 { font-size: 24px; line-height: 1.3; font-weight: 800; letter-spacing: -0.02em; color: #17233f; }
 .nl-title p { margin-top: 3px; color: var(--nl-muted); font-size: 14px; }
 .nl-live { display: inline-flex; align-items: center; gap: 6px; color: var(--nl-brand); font-size: 12.5px; font-weight: 700; }
 .nl-live i { width: 8px; height: 8px; border-radius: 50%; background: var(--nl-brand); box-shadow: 0 0 0 3px #2f62e033; }
@@ -76,7 +76,7 @@ html, body { margin: 0; padding: 0; min-width: 0; display: block; background: va
 .nl-seat svg { width: 36px; height: 36px; flex: none; }
 .nl-seat b { display: block; font-size: 19px; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; color: var(--nl-ink); }
 .nl-seat span { display: block; font-size: 12.5px; font-weight: 700; }
-.nl-seat.available { background: var(--nl-a-bg); border-color: var(--nl-a-line); } .nl-seat.available span { color: var(--nl-a-text); }
+.nl-seat.available { background: #ffffff; border-color: var(--nl-a-line); } .nl-seat.available span { color: var(--nl-a-text); }
 .nl-seat.inUse { background: var(--nl-u-bg); border-color: var(--nl-u-line); } .nl-seat.inUse span { color: var(--nl-u-text); }
 .nl-seat.occupied { background: var(--nl-o-bg); border-color: var(--nl-o-line); } .nl-seat.occupied span { color: var(--nl-o-text); }
 .nl-seat.selected { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--nl-ink); }
@@ -167,4 +167,100 @@ html, body { margin: 0; padding: 0; min-width: 0; display: block; background: va
   .nl-aside-empty { display: block; padding: 40px 24px; text-align: center; color: var(--nl-muted); font-size: 14px; background: #fff; border: 1.5px dashed var(--nl-line); border-radius: 28px; }
   .nl-modal-wrap { align-items: center; } .nl-modal { border-radius: 26px; }
   .nl-footer { text-align: left; }
+}
+
+/* 2026 모바일 UI 개선: 기존 기능과 컴포넌트 구조 유지 */
+:root {
+  --nl-bg: #f6f8fb;
+  --nl-card: #fff;
+  --nl-ink: #182b45;
+  --nl-muted: #66758a;
+  --nl-line: #e5eaf1;
+  --nl-brand: #244b77;
+  --nl-brand-soft: #eaf0f7;
+  --nl-brand-faint: #f2f5f9;
+  --nl-a: #2e76ae;
+  --nl-a-text: #235d90;
+  --nl-a-bg: #edf5fb;
+  --nl-a-line: #d2e4f1;
+  --nl-u: #39836c;
+  --nl-u-text: #28715a;
+  --nl-u-bg: #eff8f3;
+  --nl-u-line: #d4e8dc;
+  --nl-o: #bd8542;
+  --nl-o-text: #94652d;
+  --nl-o-bg: #fcf6eb;
+  --nl-o-line: #f0dfc5;
+}
+.nl-app { background: var(--nl-bg); color: var(--nl-ink); }
+.nl-header { border-color: var(--nl-line); box-shadow: 0 2px 12px rgba(24,43,69,.025); }
+.nl-logo { border-radius: 10px; }
+.nl-logo svg circle { fill: var(--nl-brand); }
+.nl-brand strong { color: var(--nl-ink); letter-spacing: -.03em; }
+.nl-main { padding-top: 24px; }
+.nl-title { margin-bottom: 20px; }
+.nl-title h1 { margin: 0; color: var(--nl-ink); font-size: 25px; font-weight: 800; letter-spacing: -.045em; }
+.nl-title p { margin-top: 7px; }
+.nl-live { color: var(--nl-muted); font-weight: 600; }
+.nl-live i { background: #3b9876; box-shadow: 0 0 0 3px #3b987622; }
+.nl-stat { border-width: 1px; border-radius: 16px; padding: 17px 18px; box-shadow: 0 3px 14px rgba(24,43,69,.025); }
+.nl-stat h2 { color: inherit; font-size: 29px; }
+.nl-stat.primary { background: var(--nl-brand); color: #fff; }
+.nl-stat.primary h2 { color: #fff; }
+.nl-stat.primary p { color: #dce7f2; }
+.nl-floors { gap: 9px; margin-bottom: 20px; }
+.nl-floors button { border-width: 1px; border-radius: 12px; background: #fff; color: #66758a; }
+.nl-floors button.active { background: var(--nl-brand); border-color: var(--nl-brand); color: #fff; }
+.nl-legend { margin: 0 2px 12px; color: #56677d; font-weight: 600; }
+.nl-legend i { border-radius: 50%; width: 9px; height: 9px; }
+.nl-seats { padding: 0; gap: 10px; background: transparent; border-radius: 0; }
+.nl-seat { min-height: 88px; padding: 13px 11px; gap: 9px; border-width: 1px; border-radius: 15px; }
+.nl-seat svg { width: 31px; height: 31px; }
+.nl-seat b { font-size: 17px; }
+.nl-seat span { font-size: 12px; }
+.nl-seat.selected { box-shadow: 0 0 0 2px var(--nl-brand); }
+.nl-nav { box-shadow: 0 -3px 18px rgba(24,43,69,.045); }
+.nl-nav button.active .ic { background: var(--nl-brand-soft); }
+.nl-sheet { border-radius: 22px 22px 0 0; }
+.nl-fact { background: var(--nl-brand-faint); }
+.nl-item, .nl-empty { border-width: 1px; border-radius: 16px; }
+.nl-footer { color: #8490a0; }
+@media (max-width: 380px) {
+  .nl-main { padding-left: 13px; padding-right: 13px; }
+  .nl-seat { padding: 11px 8px; gap: 6px; }
+  .nl-seat svg { width: 27px; height: 27px; }
+  .nl-seat b { font-size: 16px; }
+  .nl-legend { gap: 6px 10px; font-size: 11px; }
+}
+@media (min-width: 1000px) {
+  .nl-main { padding-top: 36px; }
+  .nl-seat { min-height: 104px; padding: 18px; }
+  .nl-seat svg { width: 42px; height: 42px; }
+}
+
+/* Header-only adjustment: larger brand, centered single-line name */
+.nl-header { min-height: 88px; padding-top: calc(16px + env(safe-area-inset-top)); padding-bottom: 16px; }
+.nl-brand { align-items: center; gap: 14px; }
+.nl-logo { width: 50px; height: 50px; border-radius: 14px; }
+.nl-logo svg { width: 30px; height: 30px; }
+.nl-brand strong { display: flex; align-items: center; min-height: 50px; font-size: 24px; line-height: 1.2; font-weight: 800; }
+@media (min-width: 1000px) {
+  .nl-header { min-height: 0; }
+}
+
+/* Requested adjustments: consistent status colors and smaller headings */
+:root {
+  --nl-brand: var(--nl-a);
+  --nl-brand-soft: var(--nl-a-bg);
+  --nl-brand-faint: var(--nl-a-bg);
+}
+.nl-logo svg circle { fill: var(--nl-brand); }
+.nl-brand strong { font-size: 21px; }
+.nl-title h1 { font-size: 22px; }
+.nl-live:not(.off) i {
+  background: var(--nl-u);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nl-u) 18%, transparent);
+}
+@media (min-width: 1000px) {
+  .nl-title h1 { font-size: 23px; }
 }
